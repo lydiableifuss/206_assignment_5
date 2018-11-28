@@ -1,0 +1,67 @@
+---
+title: "206_5_part_1"
+author: "Lydia Bleifuss"
+date: "11/28/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include = FALSE}
+#Loading Packages
+library(tidyverse)
+library(pwr)
+library(knitr)
+library(plotly)
+library(extrafont)
+library(ggrepel)
+library(kableExtra)
+library(effsize)
+library(dplyr)
+library(vcdExtra)
+library(car)
+library(ggpubr)
+library(ggplot2)
+library(ggsignif)
+library(xtable)
+library(stargazer)
+```
+
+**Male and female graduate enrollment (1967 - 2015)** 
+
+Compare trends in total graduate enrollment for males and females (including full-time/part-time and private/public universities) in the United States from 1967 - 2015.
+
+Describe your results statistically, graphically and in text.
+
+```{r}
+#Chi Square: Comparing porportion of males enrolled compared to females
+
+#Question: Is there a significant association between sex and total graduate enrollment in the U.S. from 1967 - 2015? 
+
+#Create an appropriate df: when running chi-square, we want data frame that only contains counts
+
+get_guns <- gc_df %>% 
+  filter(gender != "NA", make_get_guns != "NA") %>% 
+  count(gender, make_get_guns) %>% 
+  spread(make_get_guns, n) %>% 
+  select(-gender)
+
+
+rownames(get_guns) <- c("Female", "Male") # reassign row names from 1, 2 to be more informative Female and Male
+
+#Look at the actual proportions:
+
+guns_prop <- prop.table(as.matrix(get_guns), 1)
+guns_prop 
+
+#,1 = proportion calculated by row 
+
+# Run chi-square test for independence (sig association between sex of respondents and enrollment in graduate school?)
+
+guns_x2 <- chisq.test(get_guns)
+guns_x2
+
+```
+
