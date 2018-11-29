@@ -9,9 +9,11 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+### 1. Load packages
+
 ```{r messaage=FALSE}
  
-# Load packages
+# Loaded tidyverse and other packages
 
 library(tidyverse)
 library(pwr)
@@ -29,6 +31,88 @@ library(ggplot2)
 library(ggsignif)
 library(xtable)
 library(stargazer)
+
+```
+
+### 2. Read in the dataset 
+
+```{r message= FALSE}
+
+# Read in the faculty salary dataset for 2008-2009, named it fac_salary. 
+
+fac_salary <- read_csv("Faculty_Salary_2008_2009_copy.csv")
+
+```
+
+### 3. Do some data exploration (visual) and think critically about the variables
+
+*Note: It's OK to LOOK at things separately, even if you're including all in a model together!*
+
+```{r}
+
+# A. Look at the relationship between years of faculty service and salary, separated by sex. 
+
+by_service_sex <- ggplot(fac_salary, aes(x= Years_Faculty_Service, y= Salary))+
+  geom_point()+
+  facet_wrap(~Sex)
+
+by_service_sex
+
+# B. Look at the relationship between years since PhD and salary, separated by sex. 
+
+by_PhD_sex <- ggplot(fac_salary, aes(x= Years_Since_PhD, y= Salary))+
+  geom_point()+
+  facet_wrap(~Sex)
+
+by_PhD_sex
+
+# C. Look at the relationship between years of faculty service and salary, separated by discipline. 
+
+by_service_discipline <- ggplot(fac_salary, aes(x= Years_Faculty_Service, y= Salary))+
+  geom_point()+
+  facet_wrap(~Discipline)
+
+by_service_discipline
+
+# D. Look at the relationship between years since PhD and salary, separated by discipline.
+
+by_PhD_discipline <- ggplot(fac_salary, aes(x= Years_Since_PhD, y= Salary))+
+  geom_point()+
+  facet_wrap(~Discipline)
+
+by_PhD_discipline 
+
+# E. Relationship between years of faculty service and salary. 
+
+by_service <- ggplot(fac_salary, aes(x= Years_Faculty_Service, y= Salary))+
+  geom_point()
+
+by_service
+
+# F. Relationship between years of since PhD and salary
+
+by_PhD <- ggplot(fac_salary, aes(x= Years_Since_PhD, y= Salary))+
+  geom_point()
+
+by_PhD
+
+```
+
+### 4. Perform Mulitple linear regression 
+
+```{r}
+
+# First, create a saturated model that contains all predictor variables 
+
+# A. Saturated model: 
+
+salary_lm1 <- lm(Salary ~ Rank + Discipline + Years_Since_PhD + Years_Faculty_Service + Sex + Salary, data = fac_salary)
+
+salary_lm1
+
+# Rank= Associate Professor, Discipline= A (theoretical), and Sex= Female all selected as reference variables. 
+
+summary(salary_lm1)
 
 ```
 
