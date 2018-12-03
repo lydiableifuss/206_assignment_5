@@ -27,6 +27,9 @@ library(ggplot2)
 library(ggsignif)
 library(xtable)
 library(stargazer)
+library(reshape2)
+library(RColorBrewer)
+
 ```
 
 **Male and female salaries for starting postdoctoral and other employment positions (2015)** 
@@ -111,5 +114,45 @@ test_employ
 #P-value is significant
 #Same error message....
 
+```
+
+```{r}
+#Combining data 
+
+data_all <- melt(median_salary[c('field', 'male_post', 'female_post', 'male_employ', 'female_employ')], id.vars = 1)
+
+#New df for post_doc graph
+
+post_df <- data_all %>% 
+  filter(variable == "female_post" | variable == "male_post")
+
+#New df for employ graph
+
+employ_df <- data_all %>% 
+  filter(variable == "female_employ" | variable == "male_employ")
+```
+
+
+```{r}
+#Column graphs of median salary for each field in post_doc
+
+post_graph <- ggplot(post_df, aes(x = field, y = value))+
+  geom_col(aes(fill = variable), position = "dodge")+
+  theme_classic()+
+  scale_fill_manual(values = c("green", "purple"),
+                    name = "Group",
+                    labels = c("Male Postdoctoral Study", "Female Postdoctoral Study"
+                    ))+
+  scale_y_continuous(expand = c(0,0),
+                     limits = c(0,70000),
+                     breaks = seq(0,70000, by = 10000))+ 
+  theme(axis.text.x = element_text(angle = 55, hjust = 1, size = 5))+
+  labs(x = "Field of Study", y = "Median Salary ($)")
+  
+post_graph
+```
+
+```{r}
+#Column graphs of median salary for each field in employ
 ```
 
