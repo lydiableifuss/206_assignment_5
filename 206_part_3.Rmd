@@ -117,7 +117,7 @@ test_employ
 ```
 
 ```{r}
-#Combining data 
+#Combining data for post_doc
 
 data_all <- melt(median_salary[c('field', 'male_post', 'female_post', 'male_employ', 'female_employ')], id.vars = 1)
 
@@ -154,5 +154,19 @@ post_graph
 
 ```{r}
 #Column graphs of median salary for each field in employ
+
+employ_graph <- ggplot(employ_df, aes(x = field, y = value))+
+  geom_col(aes(fill = variable), position = "dodge")+
+  scale_fill_manual(values = c("yellow", "blue"),
+                    name = "Group",
+                    labels = c("Male Postdoctoral Employment", "Female Postdoctoral Employment"))+
+  theme_classic()+
+  scale_y_continuous(expand = c(0,0),
+                     limits = c(0,125000),
+                     breaks = seq(0,125000, by = 20000))+ 
+  theme(axis.text.x = element_text(angle = 55, hjust = 1, size = 5))+
+  labs(x = "Field of Study", y = "Median Salary ($)")
+
+employ_graph
 ```
 
