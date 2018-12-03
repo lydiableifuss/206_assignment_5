@@ -1,0 +1,115 @@
+---
+title: "206_5_part_3"
+author: "Lydia Bleifuss"
+date: "11/28/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include = FALSE}
+#Loading Packages
+library(tidyverse)
+library(pwr)
+library(knitr)
+library(plotly)
+library(extrafont)
+library(ggrepel)
+library(kableExtra)
+library(effsize)
+library(dplyr)
+library(vcdExtra)
+library(car)
+library(ggpubr)
+library(ggplot2)
+library(ggsignif)
+library(xtable)
+library(stargazer)
+```
+
+**Male and female salaries for starting postdoctoral and other employment positions (2015)** 
+
+Compare median salaries for male and female doctorate recipients in 2015. 
+
+Questions One: Does median salary differ significantly between male and female starting POSTDOC positions? 
+
+Question Two: Does median salary differ significantly between male and female PhD recipients in NON-POSTDOC employment positions?
+
+```{r}
+#Read in data and explore.
+
+median_salary <- read_csv("median_sal.csv")
+
+#Males non-post_doc (employment)
+
+hist_male_employ <- ggplot(median_salary, aes(x = male_employ))+
+  geom_histogram(bins = 10)
+hist_male_employ
+
+qq_male_employ <- ggplot(median_salary, aes(sample = male_employ))+
+  geom_qq()
+qq_male_employ
+
+#Females non-post_doc (employment)
+
+hist_female_employ <- ggplot(median_salary, aes(x = female_employ))+
+  geom_histogram(bins = 10)
+hist_female_employ
+
+qq_female_employ <- ggplot(median_salary, aes(sample = female_employ))+
+  geom_qq()
+qq_female_employ
+
+#Males post_doc
+
+hist_male_post <- ggplot(median_salary, aes(x = male_post))+
+  geom_histogram(bins = 10)
+hist_male_post
+
+qq_male_post <- ggplot(median_salary, aes(sample = male_post))+
+  geom_qq()
+qq_male_post
+
+#Females post_doc
+
+hist_female_post <- ggplot(median_salary, aes(x = female_post))+
+  geom_histogram(bins = 10)
+hist_female_post
+
+qq_female_post <- ggplot(median_salary, aes(sample = female_post))+
+  geom_qq()
+qq_female_post
+
+#Looking not super well distributed (bell-curve/linear) Man-Whitney U acceptable?
+```
+```{r}
+#Man-Whitney-U (Wilcox Test)
+
+#Does median salary differ significantly between male and female starting POSTDOC positions?
+
+test_post <- wilcox.test(median_salary$male_post, median_salary$female_post, paired = TRUE)
+
+test_post
+
+#Not significant p-value
+#What does "cannot compute exact p-value with ties..." mean?
+```
+
+
+
+```{r}
+#Man-Whitney-U (Wilcox Test)
+
+#Question Two: Does median salary differ significantly between male and female PhD recipients in NON-POSTDOC employment positions?
+
+test_employ <- wilcox.test(median_salary$male_employ, median_salary$female_employ, paired = TRUE)
+
+test_employ
+
+#P-value is significant
+#Same error message....
+
+```
+

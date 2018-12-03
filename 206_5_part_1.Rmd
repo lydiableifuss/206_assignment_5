@@ -36,32 +36,72 @@ Compare trends in total graduate enrollment for males and females (including ful
 Describe your results statistically, graphically and in text.
 
 ```{r}
+#How has the number of males enrolled changed over teh years, and how has the number of females enrolled changed over the years, and are those rates different?
+  
 #Chi Square: Comparing porportion of males enrolled compared to females
 
 #Question: Is there a significant association between sex and total graduate enrollment in the U.S. from 1967 - 2015? 
 
 #Create an appropriate df: when running chi-square, we want data frame that only contains counts
+enroll_df <- read_csv("grad_enroll.csv")
 
-get_guns <- gc_df %>% 
-  filter(gender != "NA", make_get_guns != "NA") %>% 
-  count(gender, make_get_guns) %>% 
-  spread(make_get_guns, n) %>% 
-  select(-gender)
+grad_total <- enroll_df %>% 
+  select(year, total_males, total_females) 
 
-
-rownames(get_guns) <- c("Female", "Male") # reassign row names from 1, 2 to be more informative Female and Male
 
 #Look at the actual proportions:
 
-guns_prop <- prop.table(as.matrix(get_guns), 1)
-guns_prop 
+grad_prop <- prop.table(as.matrix(grad_total), 1)
+grad_prop 
 
 #,1 = proportion calculated by row 
 
 # Run chi-square test for independence (sig association between sex of respondents and enrollment in graduate school?)
 
-guns_x2 <- chisq.test(get_guns)
-guns_x2
+grad_chi <- chisq.test(grad_total)
+grad_chi
+
+```
+
+**Example from LOBSTER**
+
+There is a significant association between observed gender and enrollment in grad school from 1967 - 2015 ($\chi^2${`r grad_chi$parameter`} = ???, *p* = ???). 
+
+
+
+```{r}
+
+#Graphic Analysis
+enroll_graph <- ggplot(grad_total, aes(x = year))+
+  geom_line(aes(y = total_males, color = "total_males"))+
+  geom_line(aes(y = total_females, color = "total_females"))
+
+enroll_graph
+
+#Linear Regression
+
+lm_females <- lm(grad_total$total_females ~ grad_total$year)
+summary(lm_females)
+
+lm_males <- lm(grad_total$total_males ~ grad_total$year)
+summary(lm_males)
+
+#Looking at Regression Residuals
+plot(lm_females)
+
+plot(lm_males)
+
+#Plotting Linear Regression
+grad_model_graph <- ggplot(grad_total, aes(x = year)) +
+  geom_point(aes(y = total_males, color = "total_males")) +
+  geom_smooth(aes(y = total_males), method = lm, se = TRUE, size = 0.5, color = "gray20") +
+  geom_point(aes(y = total_females, color = "total_females")) +
+  geom_smooth(aes(y = total_females), method = lm, se = TRUE, size = 0.5, color = "gray20") +
+  theme_classic() +
+  theme(legend.justification=c(1,0), legend.position=c(0.25,0.7)) +
+  scale_x_continuous(expand = c(0,0), limits = c(1967, 2016)) +
+  labs(x = "Year", y = "Graduate Enrollment")
+grad_model_graph + labs(color = "Gender")
 
 ```
 
