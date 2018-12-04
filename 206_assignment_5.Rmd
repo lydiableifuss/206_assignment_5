@@ -1,6 +1,6 @@
 ---
 title: "206_assignment_5"
-author: "Lydia Bleifuss & Camila Bobroff"
+author: "Lydia Bleifuss, Camila Bobroff & Robert Heim"
 date: "11/26/2018"
 output: html_document
 ---
