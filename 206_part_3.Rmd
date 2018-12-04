@@ -96,7 +96,7 @@ test_post <- wilcox.test(median_salary$male_post, median_salary$female_post, pai
 
 test_post
 
-#Not significant p-value
+#Not significant p-value (0.8884)
 
 #Non-parametric wimcoxon signed rank test for PhD recipients starting posdoc positions revealed that there was *not* a signficant difference between salaries for males and females (V=19.5, p=.888). 
 ```
@@ -112,7 +112,7 @@ test_employ <- wilcox.test(median_salary$male_employ, median_salary$female_emplo
 
 test_employ
 
-#P-value is significant
+#P-value is significant (p < 0.001)
 
 #Non-Parametric Wilcomxon Signed Rank anaylsis for data collected from 15 fields of study in the year 2015 revealed that the median salaries (in dollars) differed significantly for male and female PhD recipients in non-postdoc employment positions (V= 101, p=0.003). 
 ```
@@ -176,7 +176,7 @@ box_plot <- ggplot(data_all, aes(x = GenderEmployment, y = Salary, fill = Gender
   geom_boxplot(show.legend = FALSE)+
   theme_classic()+
   scale_fill_manual(values = c("goldenrod3", "darkseagreen4", "cadetblue3", "darkslategray4"))+
-  labs(y = "Median Salary Across Fields ($)", x = "Group")+
+  labs(y = "Median Salary ($)", x = "Post Doctoral Status")+
   scale_y_continuous(expand = c(0,0),
                      limits = c(30000,130000))+
   scale_x_discrete(labels = c("male_post" = "Male \nPost Doc \nStudy",
