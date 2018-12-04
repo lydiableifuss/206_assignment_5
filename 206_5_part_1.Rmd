@@ -66,14 +66,15 @@ plot(lm_males)
 #Plotting Linear Regression
 grad_model_graph <- ggplot(grad_total, aes(x = year)) +
   geom_point(aes(y = total_males, color = "total_males")) +
-  geom_smooth(aes(y = total_males), method = lm, se = TRUE, size = 0.5, color = "gray20") +
+  geom_smooth(aes(y = total_males), method = lm, se = TRUE, size = 0.5, color = "gray15") +
   geom_point(aes(y = total_females, color = "total_females")) +
-  geom_smooth(aes(y = total_females), method = lm, se = TRUE, size = 0.5, color = "gray20") +
+  geom_smooth(aes(y = total_females), method = lm, se = TRUE, size = 0.5, color = "gray15") +
   theme_classic() +
-  theme(legend.justification=c(1,0), legend.position=c(0.25,0.7)) +
+  theme(legend.justification=c(1,0), legend.position=c(0.3,0.8)) +
   scale_x_continuous(expand = c(0,0), limits = c(1967, 2016)) +
   labs(x = "Year", y = "Graduate Enrollment")
 grad_model_graph + labs(color = "Gender")
+
 
 ```
 

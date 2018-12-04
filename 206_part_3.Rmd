@@ -167,6 +167,8 @@ employ_graph <- ggplot(employ_df, aes(x = field, y = value))+
 ```
 
 ```{r}
+#Box plot comparing medians between gender for employment vs. post doc
+
 colnames(data_all) <- c("Field", "GenderEmployment", "Salary")
 
 box_plot <- ggplot(data_all, aes(x = GenderEmployment, y = Salary, fill = GenderEmployment))+
@@ -177,9 +179,9 @@ box_plot <- ggplot(data_all, aes(x = GenderEmployment, y = Salary, fill = Gender
   scale_y_continuous(expand = c(0,0),
                      limits = c(30000,130000))+
   scale_x_discrete(labels = c("male_post" = "Male \nPost Doc \nStudy",
-                              "female_post" = "Female \nPost Doc \nStudy",
-                              "male_employ" = "Male \n Post Doc \nEmployment",
-                              "female_employ" = "Female \n Post Doc \nEmployment"))
+                              "female_post" = "Female \nPost Doctoral \nStudy",
+                              "male_employ" = "Male \n Post Doctoral \nEmployment",
+                              "female_employ" = "Female \n Post Doctoral \nEmployment"))
   
 box_plot
 
