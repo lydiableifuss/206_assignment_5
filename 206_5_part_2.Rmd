@@ -1,0 +1,66 @@
+---
+title: "206_5_part_2"
+author: "Camila Bobroff"
+date: "12/3/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Shifts in female PhD recipients by field (1985, 2000, and 2015). Describe if and how there was a shift in PhDs awarded to females in four fields (Physical and Earth Sciences, Engineering, Education, and Humanities & Arts) in 1985, 2000, and 2015. Describe your results statistically, in a graph or table, and in text. Note: There are several ways that you can interpret this question. You are invited to decide which you think is/are most interesting. Just be really clear about what you are asking/answering in your report.
+
+```{r}
+#Load packages and read in data
+
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(kableExtra)
+
+female_phd <- read_csv("female_phds.csv")
+female_phd_prop <- read_csv("female_phd_prop.csv")
+```
+
+```{r}
+#Bar graph showing total phd degrees females earned per year based on field
+phd_bar <- ggplot(female_phd, aes(fill = Field, x = Year, y = Degrees)) +
+  geom_bar(stat = "identity") +
+  theme_classic() +
+    scale_fill_manual(values = c("cadetblue3", "darkslategray4", "goldenrod3", "darkseagreen4"))+
+  scale_x_continuous(expand = c(0,0), breaks = seq(1985,2015, by = 15))+
+  scale_y_continuous(expand = c(0,0)) +
+  labs(x = "Year", y = "Proportion of PhDs Awarded")
+
+phd_bar
+
+#Bar graph showing number of degrees in each field as a percentage of the whole
+phd_bar_pct <- ggplot(female_phd, aes(fill = Field, x = Year, y = Degrees))+
+  geom_bar(stat = "identity", position="fill")+
+  theme_classic()+
+  scale_fill_manual(values = c("cadetblue3", "darkslategray4", "goldenrod3", "darkseagreen4"))+
+  scale_x_continuous(expand = c(0,0), breaks = seq(1985,2015, by = 15))+
+  scale_y_continuous(expand = c(0,0))+
+  labs(x = "Year", y = "Proportion of PhDs Awarded")
+phd_bar_pct
+
+```
+
+```{r}
+#Chi-Square
+# Is there an association between degrees awarded to females and year?
+
+#H0: There is no association between degrees awarded to females and year.
+#HA: There is an association between degrees awarded to females and year.
+chi_phd <- female_phd_prop %>% 
+  select(-Field)
+
+rownames(chi_phd) <- c("Physical sciences and earth sciences", "Engineering", "Education", "Humanities and arts")
+
+size_prop <- prop.table(as.matrix(chi_phd), 1)
+
+phd_x2 <- chisq.test(chi_phd)
+#p-value<.001, so we reject the null. There is an association between PhDs awarded to women and year.
+```
+
