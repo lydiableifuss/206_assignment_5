@@ -35,34 +35,68 @@ Compare trends in total graduate enrollment for males and females (including ful
 
 Describe your results statistically, graphically and in text.
 
-**Example from LOBSTER**
+```{r, include = FALSE}
+#Read in Data
+enroll_df <- read_csv("grad_enroll.csv")
 
-There is a significant association between observed gender and enrollment in grad school from 1967 - 2015 ($\chi^2${`r grad_chi$parameter`} = ???, *p* = ???). 
+grad_total <- enroll_df %>% 
+  select(year, total_males, total_females)
 
-
-
-```{r}
-
-#Graphic Analysis
+#Exploritory graphic Analysis
 enroll_graph <- ggplot(grad_total, aes(x = year))+
   geom_line(aes(y = total_males, color = "total_males"))+
   geom_line(aes(y = total_females, color = "total_females"))
+```
 
-enroll_graph
-
-#Linear Regression
+```{r, include = FALSE}
+#Linear Regression 
+##############################
+#FEMALES
 
 lm_females <- lm(grad_total$total_females ~ grad_total$year)
 summary(lm_females)
+#Total female enrollment = -58955502 + 30126 (Year)
 
-lm_males <- lm(grad_total$total_males ~ grad_total$year)
-summary(lm_males)
+# Multiple R^2 = 98% of female college enrollment rate is determined by year
+# p-value < 0.001 both variables, year and female enrollment, are significant
+
+#Pearson's R (correlation)
+cor_females <- cor.test(grad_total$year, grad_total$total_females)
+cor_females
+#Pearson's R = 0.99
 
 #Looking at Regression Residuals
 plot(lm_females)
 
+#######Year significantly predicts college enrollment rates(??totals??) for females (b = 30126, t(47) = 51.66, p < 0.001) with a strong positive correlation between the two (Pearson’s r = 0.99). The overall model (Total Female enrollment = -58955502 + 30126 (Year)) explains a significant amount of variance in enrollment ??? (F(1,47) = 2669, p < 0.001, R2 = 0.9827).
+
+```
+
+```{r, include = FALSE}
+#Linear Regression 
+############################
+#MALES
+
+lm_males <- lm(grad_total$total_males ~ grad_total$year)
+summary(lm_males)
+#Total male enrollment= -17112153 + 9069(Year)
+
+# Multiple R^2 = 85% of male enrollment rate is determined by year
+# p-value < 0.001 both variables, year and male enrollment, are significant
+
+#Pearson's R (correlation)
+cor_males <- cor.test(grad_total$year, grad_total$total_males)
+cor_males
+#Pearson's R = 0.92
+
+#Looking at Regression Residuals
 plot(lm_males)
 
+#######Year significantly predicts college enrollment rates??? for males (b = 9069, t(47) = 16.61, p < 0.001) with a strong positivecorrelation between the two (Pearson’s r = 0.92). The overall model (Total Male enrollment = -17,112,153 + 9069 (Year) explains a significant amount of variance in enrollment rate??? (F(1,47) = 276, p < 0.001, R2 = 0.8545).
+
+```
+
+```{r}
 #Plotting Linear Regression
 grad_model_graph <- ggplot(grad_total, aes(x = year)) +
   geom_point(aes(y = total_males, color = "total_males")) +
@@ -71,10 +105,12 @@ grad_model_graph <- ggplot(grad_total, aes(x = year)) +
   geom_smooth(aes(y = total_females), method = lm, se = TRUE, size = 0.5, color = "gray15") +
   theme_classic() +
   theme(legend.justification=c(1,0), legend.position=c(0.3,0.8)) +
+  scale_colour_discrete(name="Gender",
+                         breaks=c("total_females", "total_males"),
+                         labels=c("Total Females", "Total Males")) +
   scale_x_continuous(expand = c(0,0), limits = c(1967, 2016)) +
   labs(x = "Year", y = "Graduate Enrollment")
+
 grad_model_graph + labs(color = "Gender")
-
-
 ```
 

@@ -97,7 +97,8 @@ test_post <- wilcox.test(median_salary$male_post, median_salary$female_post, pai
 test_post
 
 #Not significant p-value
-#What does "cannot compute exact p-value with ties..." mean?
+
+#Non-parametric wimcoxon signed rank test for PhD recipients starting posdoc positions revealed that there was *not* a signficant difference between salaries for males and females (V=19.5, p=.888). 
 ```
 
 
@@ -112,8 +113,8 @@ test_employ <- wilcox.test(median_salary$male_employ, median_salary$female_emplo
 test_employ
 
 #P-value is significant
-#Same error message....
 
+#Non-Parametric Wilcomxon Signed Rank anaylsis for data collected from 15 fields of study in the year 2015 revealed that the median salaries (in dollars) differed significantly for male and female PhD recipients in non-postdoc employment positions (V= 101, p=0.003). 
 ```
 
 ```{r}
